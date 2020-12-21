@@ -24,15 +24,23 @@
 <%
     if (curUser.email == '') {
 %>
-        <div class="container row add-email-box" id="add-email-box">
-            <label for="add-email">Добавьте электронную почту, чтобы получать уведомления:</label>
-            <div>
-                <input type="email" id="add-email" class="add-email" placeholder="example@site.com" required>
-                <span id="hide"></span>
-                <div id="warning-text">Некорректный email</div>
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: none">
+                        <h5 class="modal-title" id="staticBackdropLabel">Чтобы получать уведомления, введите электронную почту:</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="example@site.com">
+                            <span id="warning-text">Некорректный email</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: none;">
+                        <button type="submit" class="btn btn-primary" style="margin: 0 auto;" onclick="addEmail()" onblur="lostFocus()">Сохранить</button>
+                    </div>
+                </div>
             </div>
-            <button type="button" class="btn-save-email" onclick="addEmail()" onblur="lostFocus()">Сохранить</button>
-            <button type="button" class="btn-reject-email" onclick="refuseOfNotice()">Не хочу получать уведомления</button>
         </div>
 <%
     }
