@@ -3,12 +3,11 @@
     var learnings_quantity = ArrayCount(XQuery('for $elem in learnings where $elem/person_id = '+ curUserID +' return $elem'));
     var certificates_quantity = ArrayCount(XQuery('for $elem in certificates where $elem/person_id = '+ curUserID +' return $elem'));
     var tests_quantity = ArrayCount(XQuery('for $elem in assessments return $elem'));
-    var test_learnings_quantity = ArrayCount(XQuery('for $elem in test_learnings where $elem/person_id = '+ curUserID +'return $elem'));
+    var test_learnings_quantity = ArrayCount(XQuery('for $elem in test_learnings where $elem/person_id = '+ curUserID +' and $elem/state_id = 4 return $elem'));
     var quotes = ArrayDirect(XQuery("for $elem in cc_quotes return $elem"));
+    var active_learnings_quantity = ArrayCount(XQuery('for $elem in active_learnings where $elem/person_id = '+ curUserID +' return $elem'));
     var random_quote = quotes[Random(0, quotes.length - 1)];
     var curUser = ArrayOptFirstElem(XQuery('for $c in collaborators where $c/id = '+ curUserID +'return $c'));
-    var main_test = ArrayOptFirstElem(XQuery("for $elem in assessments where contains($elem/title, 'Главный') return $elem"));
-    var main_test_result = ArrayOptFirstElem(XQuery("for $t in test_learnings where $t/assessment_id = " + main_test.id + " and $t/state_id = 4 and $t/person_id = " + curUserID + " return $t"));
 %>
 
 <head>
@@ -81,44 +80,42 @@
             </div>
             <div class="row mt-4">
                 <div class="col-3 col-sm-3 col-md-4" style="min-width: 260px; margin-bottom: 20px;">
-                    <div class="card form-card-style border-0">
-                        <div class="card-body pt-3 pb-2 text-left">
-                            <h5 class="card-title">Тестирование</h5>
-                            <p class="card-text point-style target px-3 py-2">
-                                <%
-                                    if (main_test_result !== undefined) {
-                                %>
-                                        <span class="col test-result target p-0" style="color: green;">Тест пройден</span>
-                                <%
-                                    } else {
-                                %>
-                                        <span class="col test-result target p-0" style="color: darkred;">Тест не пройден</span>
-                                <%
-                                    }
-                                %>
-                            </p>
+                    <a style="display: block; color: #000;" class="statistics-link" href="/view_doc.html?mode=test_learnings_list">
+                        <div class="card form-card-style border-0">
+                                <div class="card-body pt-3 pb-2 text-left">
+                                    <h5 class="card-title">Пройдено тестов</h5>
+                                    <p class="card-text point-style target px-3 py-2">
+                                        <span class="col point-style target p-0"><%=test_learnings_quantity%></span>
+                                        /
+                                        <span class="col point-style target p-0"><%=tests_quantity%></span>
+                                    </p>
+                                </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3 col-sm-3 col-md-4" style="min-width: 260px; margin-bottom: 20px;">
-                    <div class="card form-card-style border-0">
-                        <div class="card-body pt-3 pb-2 text-left">
-                            <h5 class="card-title">Изучено курсов</h5>
-                            <p class="card-text point-style target px-3 py-2">
-                                <span class="col point-style target p-0 animate1"><%=learnings_quantity%></span>
-                                /
-                                <span class="col point-style target p-0 animate2"><%=courses_quantity%></span>
-                            </p>
+                    <a style="display: block; color: #000;" class="statistics-link" href="/view_doc.html?mode=learnings_list">
+                        <div class="card form-card-style border-0">
+                            <div class="card-body pt-3 pb-2 text-left">
+                                <h5 class="card-title">Изучено курсов</h5>
+                                <p class="card-text point-style target px-3 py-2">
+                                    <span class="col point-style target p-0"><%=learnings_quantity%></span>
+                                    /
+                                    <span class="col point-style target p-0"><%=courses_quantity%></span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-4 col-sm-4 col-md-4" style="min-width: 260px; margin-bottom: 20px;">
-                    <div class="card form-card-style border-0">
-                        <div class="card-body pt-3 pb-2 text-left">
-                            <h5 class="card-title">Мои сертификаты</h5>
-                            <p class="card-text point-style target px-3 py-2"><%=certificates_quantity%></p>
+                    <a style="display: block; color: #000;" class="statistics-link" href="/view_doc.html?mode=active_learnings_list">
+                        <div class="card form-card-style border-0">
+                            <div class="card-body pt-3 pb-2 text-left">
+                                <h5 class="card-title">Назначено курсов</h5>
+                                <p class="card-text point-style target px-3 py-2"><%=active_learnings_quantity%></p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>    
         </div>
