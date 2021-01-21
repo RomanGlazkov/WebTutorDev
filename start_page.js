@@ -98,21 +98,35 @@ animateNumber(".animate2");
 
 $(window).on('load',function(){
     $('#staticBackdrop').modal('show');
+    $('#staticBackdropConfirm').modal('show');
 });
 
 function addEmail() {
     var inputEmail = document.getElementById('email');
     var email = inputEmail.value;
     var warningText = document.getElementById('warning-text');
+    var randomString = makeRandomString(10);
+
+    function makeRandomString(n) {
+        var result = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < n; i++) {
+            result += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return result;
+    }
+
     if (validateEmail(email)) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost/add_email.html',
+            url: 'http://' + window.location.host +  '/add_email.html',
             data: {
                 email: email,
+                random_string: randomString
             },
             success: function() {
                 $("#staticBackdrop").modal('hide');
+                location.reload();
             }
         });
     } else {

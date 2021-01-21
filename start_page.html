@@ -7,7 +7,7 @@
     var quotes = ArrayDirect(XQuery("for $elem in cc_quotes return $elem"));
     var active_learnings_quantity = ArrayCount(XQuery('for $elem in active_learnings where $elem/person_id = '+ curUserID +' return $elem'));
     var random_quote = quotes[Random(0, quotes.length - 1)];
-    var curUser = ArrayOptFirstElem(XQuery('for $c in collaborators where $c/id = '+ curUserID +'return $c'));
+    var curUserTopElem = OpenDoc(UrlFromDocID(curUserID)).TopElem;
 %>
 
 <head>
@@ -21,7 +21,7 @@
 </head>
 
 <%
-    if (curUser.email == '') {
+    if (curUserTopElem.email == '') {
 %>
         <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -37,6 +37,27 @@
                     </div>
                     <div class="modal-footer" style="border-top: none;">
                         <button type="submit" class="btn btn-primary" style="margin: 0 auto;" onclick="addEmail()" onblur="lostFocus()">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<%
+    } else if (curUserTopElem.email_conf == false) {
+%>
+        <div class="modal fade" id="staticBackdropConfirm" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: none">
+                        <h5 class="modal-title" id="staticBackdropLabel">На Ваш электронный адрес было отправлено письмо со ссылкой для подтверждения электронной почты. При необходимости, Вы можете изменить почту:</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="example@site.com">
+                            <span id="warning-text">Некорректный email</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: none;">
+                        <button type="submit" class="btn btn-primary" style="margin: 0 auto;" onclick="addEmail()" onblur="lostFocus()">Изменить email</button>
                     </div>
                 </div>
             </div>
